@@ -23,13 +23,11 @@ pip install firebase-admin
    ```python
    import firebase_admin
    from firebase_admin import credentials
-   from firebase_admin import firestore
    
    cred = credentials.ApplicationDefault()
    firebase_admin.initialize_app(cred, {
-     "projectId": project_id,
+     'projectId': project_id,
    })
-   db = firestore.client()
    ```
 
 
@@ -40,31 +38,38 @@ pip install firebase-admin
 
 ## 1.Firestoreデータの操作
 
+### 準備
+
+```python
+from firebase_admin import firestore
+db = firestore.client()
+```
+
 ### 作成 or 上書き
 
 ```python
 # ドキュメントIDを指定する場合
-doc_ref = db.collection("collection_name").document("document_id")
+doc_ref = db.collection('collection_name').document('document_id')
 doc_ref.set({
-	"field_name": "example_value",
-  "timestamp": firestore.SERVER_TIMESTAMP
+	'field_name': 'example_value',
+  'timestamp': firestore.SERVER_TIMESTAMP
 })
 
 # ドキュメントIDを指定しない場合
-db.collection("collection_name").add({
-	"field_name": "example_value",
-  "timestamp": firestore.SERVER_TIMESTAMP
+db.collection('collection_name').add({
+	'field_name': 'example_value',
+  'timestamp': firestore.SERVER_TIMESTAMP
 })
 ```
 
 ### 更新
 
 ```python
-doc_ref = db.collection("collection_name").document("document_id")
+doc_ref = db.collection('collection_name').document('document_id')
 doc_ref.update({
-  "filed_name1": firestore.ArrayUnion(["example_value1"])
-  "filed_name2": firestore.ArrayRemove(["example_value2"])
-  "filed_name3": firestore.Increment(50)
+  'filed_name1': firestore.ArrayUnion(['example_value1'])
+  'filed_name2': firestore.ArrayRemove(['example_value2'])
+  'filed_name3': firestore.Increment(50)
 })
 ```
 
@@ -72,3 +77,28 @@ doc_ref.update({
 
 - [Cloud Firestore にデータを追加する  |  Firebase](https://firebase.google.cn/docs/firestore/manage-data/add-data?hl=ja#python_10)
 - [Cloud Firestore でデータを取得する  |  Firebase](https://firebase.google.cn/docs/firestore/query-data/get-data?hl=ja#python)
+
+## 2. Authenticationの管理
+
+### 準備
+
+```python
+from firebase_admin import auth
+```
+
+### Authenticationの作成
+
+```python
+# すべての引数は任意
+user = auth.create_user(
+  uid = 'uid',
+  email = 'user@example.com',
+  password = 'password',
+  display_name = 'Example Name',
+)
+```
+
+### 参考記事
+
+- [ユーザー管理  |  Firebase](https://firebase.google.com/docs/auth/admin/manage-users?hl=ja#python)
+- [firebase_admin.auth module  |  Firebase](https://firebase.google.com/docs/reference/admin/python/firebase_admin.auth?hl=ja#create_user)
